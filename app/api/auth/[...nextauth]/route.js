@@ -28,7 +28,7 @@ const refreshAccessToken = async (token) => {
 const scope =
   "user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative";
 
-export const authOptions = {
+const authOptions = {
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -39,11 +39,13 @@ export const authOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+
   callbacks: {
     // initial sign in
     async jwt({
       token, account, user
     }) {
+      console.log("ini si sessonya 11", { token})
       if (account && user) {
         return {
           ...token,
@@ -56,12 +58,12 @@ export const authOptions = {
 
       // Return previous token if the access token has not expired yet
       if (Date.now() < token.accessTokenExpires) {
-        console.log(" existing access token is Valid", {})
+        console.log(" existing access token is Valid", { token })
         return token;
       }
 
       // Access token has expired, so we need to refresh it
-      console.log("access token has expired, refreshing...", {})
+      console.log("access token has expired, refreshing...", { token })
       return await refreshAccessToken(token);
     },
 
@@ -69,6 +71,7 @@ export const authOptions = {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.username = token.username;
+      console.log("ini si sessonya", {session, token})
       return session;
     }
   }
