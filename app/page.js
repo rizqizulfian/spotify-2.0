@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className=''>
+    <div className="bg-black h-screen overflow-hidden">
       <main className=''>
         <Sidebar />
         {/* Center */}
